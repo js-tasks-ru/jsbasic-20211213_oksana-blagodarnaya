@@ -1,7 +1,7 @@
 function filterRange(arr, a, b) {
   let newArr = [];
   
-  arr.find( (el) => {
+  arr.forEach((el) => {
     if(el >= a  && el <= b){
       newArr.push(el);
     }
