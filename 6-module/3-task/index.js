@@ -7,19 +7,18 @@ export default class Carousel {
 
     let btnRight = this.elem.querySelector('.carousel__arrow_right');
     let btnLeft = this.elem.querySelector('.carousel__arrow_left');
-
+    btnLeft.style.display = 'none';
+        
     btnRight.addEventListener('click', this.onClickRight);
     btnLeft.addEventListener('click', this.onClickLeft);
-    console.log(this.elem);
+    //console.log(slides[0]);
+
   }
 
   render() {
     this.elem = document.createElement('div');
-    this.elem.classList.add('Carousel'); 
-    
-    this.slides.forEach(el => {
-      
-      this.elem.insertAdjacentHTML("afterBegin", `
+    this.elem.classList.add('Carousel');
+    this.elem.insertAdjacentHTML("afterBegin", `
         <!--Кнопки переключения-->
 
         <div class="carousel__arrow carousel__arrow_right">
@@ -28,7 +27,13 @@ export default class Carousel {
         <div class="carousel__arrow carousel__arrow_left">
             <img src="/assets/images/icons/angle-left-icon.svg" alt="icon">
         </div>
+      `);
 
+    
+    this.slides.forEach(el => {
+      
+      this.elem.insertAdjacentHTML("afterBegin", `
+        
         <div class="carousel__inner">
             <!--Верстка 1-ого слайда-->
 
@@ -46,17 +51,79 @@ export default class Carousel {
       `);
     });
   }
-  
+    
   onClickRight = (event) => {
-    console.log('click');
-    //let customEvent = new CustomEvent('product-add', { bubbles: true, detail: this.slides.id });
-    //this.elem.dispatchEvent(customEvent);
+    //console.log('click');
+    let customEvent = new CustomEvent('product-add', { bubbles: true, detail: this.slides.id });
+    this.elem.dispatchEvent(customEvent);
+    let coordinates = 0;
+    let banner = this.elem.querySelector('.carousel__img');
+    let bannerWidth = banner.offsetWidth;
+    console.log(bannerWidth);
+    console.log(event);
+    
+    switch (coordinates) {
+      case coordinates = 0:
+        banner.style.transform = `translateX(${-bannerWidth}px)`;
+        coordinates = -bannerWidth;
+        btnRight.style.display = '';
+        btnLeft.style.display = '';
+        break;
+
+      case coordinates = -bannerWidth:
+        banner.style.transform = `translateX(${-bannerWidth * 2}px)`;
+        coordinates = -bannerWidth * 2;
+        btnRight.style.display = '';
+        btnLeft.style.display = '';
+        break;
+
+      case coordinates = -bannerWidth * 2:
+        banner.style.transform = `translateX(${-bannerWidth * 3}px)`;
+        coordinates = -bannerWidth * 3;
+        btnRight.style.display = 'none';
+        btnLeft.style.display = '';
+        console.log(banner.style.transform, coordinates);
+        break;
+      default:
+        console.log( "Нет таких значений" );
+    }
     
   }
 
   onClickLeft = (event) => {
     console.log('click');
+    let customEvent = new CustomEvent('product-add', { bubbles: true, detail: this.slides.id });
+    this.elem.dispatchEvent(customEvent);
+    let coordinates = 0;
+    let banner = this.elem.querySelector('.carousel__img');
+    let bannerWidth = banner.offsetWidth;
     
+        
+    switch (coordinates) {
+      case coordinates = -bannerWidth * 3:
+        banner.style.transform = `translateX(${-bannerWidth * 2}px)`;
+        coordinates = -bannerWidth * 2;
+        btnLeft.style.display = '';
+        btnRight.style.display = '';
+        break;
+
+      case coordinates = -bannerWidth * 2:
+        banner.style.transform = `translateX(${-bannerWidth}px)`;
+        coordinates = -bannerWidth;
+        btnLeft.style.display = '';
+        btnRight.style.display = '';
+        break;
+
+      case coordinates = -bannerWidth:
+        banner.style.transform = `translateX(${0}px)`;
+        coordinates = 0;
+        btnLeft.style.display = 'none';
+        btnRight.style.display = '';
+        break;
+
+      default:
+        console.log( "Нет таких значений" );
+    }
     
   }
 
