@@ -30,11 +30,10 @@ export default class StepSlider {
     sliderValue.innerHTML = '1';
     thumb.style.left = `25%`;        //  меняем положение ползунка
     progress.style.width = `25%`;    // меняем закрашеную область до ползунка 
-    
-    thumb.ondragstart = () => false; // "выключили" встроенный браузерный `Drag-and-Drop` для элемента с классом `slider__thumb`
+        
     thumb.addEventListener('pointerdown', this.onMousedown);
-    
     this.elem.addEventListener('click', this.onClick);
+    thumb.ondragstart = () => false;
     //console.log(this.elem);
   }
 
@@ -67,57 +66,51 @@ export default class StepSlider {
     this.elem.dispatchEvent(customEvent);
     
   }
-  
-  onMousedown = (event) => {
-    console.log('down');
-    //event.preventDefault();
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseUp);
-  }
-
-  onMouseMove = (event) => {
-    console.log('move');
-    document.addEventListener('pointermove', (event) => {
-      let left = event.clientX - this.elem.getBoundingClientRect().left; 
-      let leftRelative = left / this.elem.offsetWidth;
-  
-      if (leftRelative < 0) {
-        leftRelative = 0;
-      }
-  
-      if (leftRelative > 1) {
-        leftRelative = 1;
-      }
-  
-      let leftPercents = leftRelative * 100;
-      let thumb = this.elem.querySelector('.slider__thumb');
-      let progress = this.elem.querySelector('.slider__progress');
-  
-      thumb.style.left = `${leftPercents}%`;
-      progress.style.width = `${leftPercents}%`;
-      let segments = this.steps - 1;
-      let approximateValue = leftRelative * segments;
-      let value = Math.round(approximateValue);
-      let divSliderValue = this.elem.querySelector('.slider__value');
-      divSliderValue.innerHTML = value; 
-
-      let slider = this.elem;
-      slider.classList.add('slider_dragging');
-      //console.log(slider);
-    });
-  } 
-
-  onMouseUp = (event) => {
-    console.log('up');
-    let slider = this.elem;
-    slider.classList.remove('slider_dragging');  ///-?????????????????? почему не убирает класс сразу при отпускании, а только со второго раза?
     
-    let divSliderValue = this.elem.querySelector('.slider__value').textContent;
-    let customEvent = new CustomEvent('slider-change', {detail: divSliderValue, bubbles: true })
-    this.elem.dispatchEvent(customEvent);
-
-    document.removeEventListener('pointermove', this.onMouseMove);
-    this.onMouseUp = null;  ///-?????????????????? чему нужно указывать null?
+  onMousedown = (event) => {
+    
+    event.preventDefault();
+    let thumb = this.elem.querySelector('.slider__thumb');
+    let progress = this.elem.querySelector('.slider__progress');
+    let divSliderValue = this.elem.querySelector('.slider__value');
+    let slider = this.elem;
+    let steps = this.steps;
+    thumb.ondragstart = () => false;
         
-  }
+      document.addEventListener('pointermove', function onMouseMove(event) {         //// начало onMouseMove
+          
+          slider.classList.add('slider_dragging');
+          let left = event.clientX - slider.getBoundingClientRect().left;
+          let leftRelative = left / slider.offsetWidth;
+          if (leftRelative < 0) {
+            leftRelative = 0;
+          }
+          
+          if (leftRelative > 1) {
+            leftRelative = 1;
+          }
+          let leftPercents = leftRelative * 100;
+          thumb.style.left = `${leftPercents}%`;
+          progress.style.width = `${leftPercents}%`;
+          
+          let segments = steps - 1;
+          let approximateValue = leftRelative * segments;
+          let value = Math.round(approximateValue);
+          divSliderValue.innerHTML = value; 
+          
+
+              document.addEventListener('pointerup', function onMouseUp(event){     //// начало onMouseUp
+                  
+                  slider.classList.remove('slider_dragging');  
+                  document.removeEventListener('pointerdown', this.onMousedown);
+                  document.removeEventListener('pointermove', onMouseMove);
+
+                  new CustomEvent('slider-change', {detail: value, bubbles: true })
+                  
+              });
+
+      });/// end function Move
+  
+  } /// end function onMousedown
+  
 }
