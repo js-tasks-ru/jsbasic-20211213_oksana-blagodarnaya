@@ -32,7 +32,7 @@ export default class StepSlider {
     progress.style.width = `25%`;    // меняем закрашеную область до ползунка 
 
     this.elem.addEventListener('click', this.onClick);
-    console.log(this.elem);
+    //console.log(this.elem);
   }
 
   onClick = (event) => {
@@ -45,9 +45,14 @@ export default class StepSlider {
     let value = Math.round(approximateValue);  // округлили и получили "сегмент слайдера" на котором кликнули
     let valuePercents = value / segments * 100; // значение в процентах для перемещения ползунка
     divSliderValue.innerHTML = value;   // Записать новое значение внутрь элемента с классом `slider__value`.
-    
     let divSliderSteps = this.elem.querySelector('.slider__steps');
-    let span = divSliderSteps.childNodes[value+1];
+    
+    for (let i = 1; i < divSliderSteps.childNodes.length; i++) {
+     let el = divSliderSteps.childNodes[i];
+     el.classList.remove('slider__step-active');   // удаляем активный класс со спана, так как кликнули уже на другом
+    }
+
+    let span = divSliderSteps.childNodes[value+1];    //нашли активный спан
     span.classList.add('slider__step-active');       // присвоили класс активному спану
 
     let thumb = this.elem.querySelector('.slider__thumb');
