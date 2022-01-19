@@ -105,8 +105,8 @@ export default class StepSlider {
                   document.removeEventListener('pointerdown', this.onMousedown);
                   document.removeEventListener('pointermove', onMouseMove);
 
-                  new CustomEvent('slider-change', {detail: value, bubbles: true })
-                  
+                  let customEvent = new CustomEvent('slider-change', {detail: value, bubbles: true });
+                  slider.dispatchEvent(customEvent);
               });
 
       });/// end function Move
