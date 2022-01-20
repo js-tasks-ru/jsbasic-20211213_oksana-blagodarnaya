@@ -28,14 +28,13 @@ export default class Modal {
 
     this.btnClose = this.divClassModal.querySelector('.modal__close');
     this.btnClose.addEventListener('click', this.close);
-    this.closeBtnEsc();
-    //console.log(document);
-  }
+  } 
 
   open = () => {
     let body = document.querySelector('body');
     body.append(this.divClassModal);
     body.classList.add('is-modal-open');
+    this.closeBtnEsc();
     //console.log(body);
   }
 
@@ -56,7 +55,8 @@ export default class Modal {
   let body = document.querySelector('body');
   body.innerHTML = '';
   body.classList.remove('is-modal-open');
- }
+  this.closeBtnEsc();
+ } 
 
  closeBtnEsc = () => {
   let body = document.querySelector('body');
