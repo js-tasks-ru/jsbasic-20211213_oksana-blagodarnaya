@@ -39,6 +39,43 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    // ваш код ...
+    if (this.elem.classList.contains('cart-icon_visible')) {
+      let leftPos = document.querySelector('.container').getBoundingClientRect().right + 20;
+      let rightPos = document.documentElement.clientWidth - this.elem.offsetWidth - 10;
+      let initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset; // текущая Y-координата относительно окна + текущая прокрутка//Это значение не обязательно вычислять каждый раз, достаточно рассчитать при первом вызове метода
+      let leftIndent = Math.min(leftPos, rightPos) + 'px';
+      
+      if (window.pageYOffset > initialTopCoord) {
+        // плавающая корзина
+        
+        Object.assign(this.elem.style, {
+          position: 'fixed',
+          top: '50px',
+          zIndex: 103,
+          right: '10px',
+          left: leftIndent
+        });
+
+      } else {
+        // корзина сверху
+        this.elem.classList.add('shake');       
+        
+      }
+
+      let isMobile = document.documentElement.clientWidth <= 767;
+      // Если условие выполняется, обнуляем стили к исходным
+      if (isMobile) {
+        Object.assign(this.elem.style, {
+          position: 'fixed',
+          top: '15px',
+          right: '10px',
+          transform: 'none',
+          zindex: 95,
+        });
+      }
+    }
   }
+
+
+
 }
