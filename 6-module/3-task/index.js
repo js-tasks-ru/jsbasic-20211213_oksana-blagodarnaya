@@ -72,7 +72,7 @@ export default class Carousel {
     let btn = this.elem.querySelectorAll('.carousel__button');
       for (let i = 0; i < btn.length; i++) {
         btn[i].addEventListener('click', () => {
-          console.log(this.slides[i].id);
+          //console.log(this.slides[i].id);
           let customEvent = new CustomEvent('product-add', { bubbles: true, detail: this.slides[i].id });
           this.elem.dispatchEvent(customEvent);
 
