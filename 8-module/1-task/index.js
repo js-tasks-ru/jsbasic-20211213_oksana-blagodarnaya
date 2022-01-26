@@ -39,7 +39,7 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    if (this.elem.classList.contains('cart-icon_visible')) {
+    if (this.elem.offsetWidth) {
       let leftPos = document.querySelector('.container').getBoundingClientRect().right + 20;
       let rightPos = document.documentElement.clientWidth - this.elem.offsetWidth - 10;
       let initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset; // текущая Y-координата относительно окна + текущая прокрутка//Это значение не обязательно вычислять каждый раз, достаточно рассчитать при первом вызове метода

@@ -10,7 +10,7 @@ export default class ProductCard {
 
   render() {
     this.elem = document.createElement('div');
-    this.elem.classList.add('ProductCard');
+    this.elem.classList.add('card');
     
     this.elem.innerHTML = `
         <div class="card__top">
